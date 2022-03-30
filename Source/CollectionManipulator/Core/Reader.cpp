@@ -3,7 +3,7 @@
 namespace ws::cm::core
 {
 	template <>
-	std::string read<std::string>(std::ifstream& stream, std::size_t readSize)
+	std::string read<std::string>(std::ifstream& stream, const std::size_t readSize)
 	{
 		std::string result { };
 

@@ -10,7 +10,7 @@
 namespace ws::cm::core
 {
 	template <class UnknownType>
-	UnknownType read(std::ifstream& stream, std::size_t readSize)
+	UnknownType read(std::ifstream& stream, const std::size_t readSize)
 	{
 		UnknownType result{ };
 		stream.read(reinterpret_cast<char*>(&result), readSize);
@@ -24,7 +24,7 @@ namespace ws::cm::core
 	}
 
 	template <>
-	auto read<std::string>(std::ifstream& stream, std::size_t readSize) -> std::string;
+	auto read<std::string>(std::ifstream& stream, const std::size_t readSize) -> std::string;
 }
 
 #endif
