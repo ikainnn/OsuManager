@@ -14,13 +14,13 @@ namespace ws::cm
 			return { };															   \
 		}
 
+	auto read_byte_pair(std::ifstream& collectionStream)->std::pair<std::int8_t, std::int8_t>;
+	auto read_beatmap_hashs(std::ifstream& collectionStream, std::size_t hashCount)->std::vector<std::string>;
+
 	constexpr auto RELEASE_DATE = 0x1324204;
 	constexpr auto MAXIMUM_DATE = 0x5F5BEBF;
 
-	auto read_byte_pair(std::ifstream& collectionStream) -> std::pair<std::int8_t, std::int8_t>;
-	auto read_beatmap_hashs(std::ifstream& collectionStream, std::size_t hashCount) -> std::vector<std::string>;
-
-	std::vector<Collection> read_collection(std::ifstream& collectionStream)
+	auto read_collection(std::ifstream& collectionStream) -> std::vector<Collection>
 	{
 		using namespace ws::cm;
 
@@ -54,19 +54,19 @@ namespace ws::cm
 
 		return collections;
 	}
-
-	void write_collection(const std::vector<Collection>& collectionList)
+	
+	auto write_collection(const std::vector<Collection>& collectionList) -> void
 	{
 		throw std::runtime_error("Not yet implemented! :^)");	 
 	}										
-
-	std::pair<std::int8_t, std::int8_t> read_byte_pair(std::ifstream& collectionStream)
+	
+	auto read_byte_pair(std::ifstream& collectionStream) -> std::pair<std::int8_t, std::int8_t>
 	{
 		const auto value = core::read<std::int16_t>(collectionStream);
 		return { (value >> 8), ((value << 12) >> 12) % ((value >> 8) << 8) };
 	}
-
-	std::vector<std::string> read_beatmap_hashs(std::ifstream& collectionStream, const std::size_t hashCount)
+	
+	auto read_beatmap_hashs(std::ifstream& collectionStream, const std::size_t hashCount) -> std::vector<std::string>
 	{
 		std::vector<std::string> beatmapHashs { };
 
