@@ -11,6 +11,7 @@ endif()
 add_definitions(-DUNICODE -D_UNICODE)
 
 set(SRC_FILES "Source/CollectionManipulator/Core/Reader.cpp" 
-			  "Source/CollectionManipulator/Collection.cpp")
+			  "Source/CollectionManipulator/Collection.cpp" 
+			  "Source/CollectionManipulator/Core/Writer.cpp")
 
 add_library(${PROJECT_NAME} ${SRC_FILES})

@@ -21,6 +21,7 @@ namespace ws::cm
 	};
 
 	auto read_collection(std::ifstream& collectionStream) -> std::vector<Collection>;
+	auto write_collection(const std::vector<Collection>& collectionList) -> void;
 }
 
 #endif

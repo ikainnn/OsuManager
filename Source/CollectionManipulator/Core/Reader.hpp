@@ -12,7 +12,7 @@ namespace ws::cm::core
 	template <class UnknownType>
 	UnknownType read(std::ifstream& stream, const std::streamsize readSize)
 	{
-		UnknownType result{ };
+		UnknownType result { };
 		stream.read(reinterpret_cast<char*>(&result), readSize);
 		return result;
 	}
