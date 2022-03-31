@@ -14,8 +14,8 @@ namespace ws::cm
 			return { };															   \
 		}
 
-	auto read_byte_pair(std::ifstream& collectionStream)->std::pair<std::int8_t, std::int8_t>;
-	auto read_beatmap_hashs(std::ifstream& collectionStream, std::size_t hashCount)->std::vector<std::string>;
+	auto read_byte_pair(std::ifstream& collectionStream) -> std::pair<std::int8_t, std::int8_t>;
+	auto read_beatmap_hashs(std::ifstream& collectionStream, std::size_t hashCount) -> std::vector<std::string>;
 
 	constexpr auto RELEASE_DATE = 0x1324204;
 	constexpr auto MAXIMUM_DATE = 0x5F5BEBF;
