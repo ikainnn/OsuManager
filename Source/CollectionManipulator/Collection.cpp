@@ -20,7 +20,7 @@ namespace ws::cm
 	constexpr auto RELEASE_DATE = 0x1324204;
 	constexpr auto MAXIMUM_DATE = 0x5F5BEBF;
 
-	auto read_collection(std::ifstream& collectionStream) -> std::vector<Collection>
+	auto read_collection(std::ifstream& collectionStream) -> Collections
 	{
 		using namespace ws::cm;
 
@@ -55,7 +55,7 @@ namespace ws::cm
 		return collections;
 	}
 	
-	auto write_collection(const std::vector<Collection>& collectionList) -> void
+	auto write_collection(const Collections& collectionList) -> void
 	{
 		throw std::runtime_error("Not yet implemented! :^)");	 
 	}										

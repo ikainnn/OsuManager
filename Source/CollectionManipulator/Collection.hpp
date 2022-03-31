@@ -20,8 +20,10 @@ namespace ws::cm
 		BeatmapHashs hashs;
 	};
 
-	auto read_collection(std::ifstream& collectionStream) -> std::vector<Collection>;
-	auto write_collection(const std::vector<Collection>& collectionList) -> void;
+	using Collections = std::vector<Collection>;
+
+	auto read_collection(std::ifstream& collectionStream) -> Collections;
+	auto write_collection(const Collections& collectionList) -> void;
 }
 
 #endif
