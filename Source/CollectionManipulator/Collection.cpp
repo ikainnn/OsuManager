@@ -57,7 +57,7 @@ namespace ws::cm
 
 	void write_collection(const std::vector<Collection>& collectionList)
 	{
-		throw std::runtime_error("Not yet implemented! :^)");
+		throw std::runtime_error("Not yet implemented! :^)");	
 	}
 
 	std::pair<std::int8_t, std::int8_t> read_byte_pair(std::ifstream& collectionStream)
