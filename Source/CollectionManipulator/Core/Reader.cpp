@@ -3,7 +3,7 @@
 namespace ws::cm::core
 {
 	template <>
-	std::string read<std::string>(std::ifstream& stream, const std::streamsize readSize)
+	auto read<std::string>(std::ifstream& stream, const std::streamsize readSize) -> std::string
 	{
 		std::string result { };
 
