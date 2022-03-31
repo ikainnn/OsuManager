@@ -37,9 +37,9 @@ namespace ws::cm
 
 		for (auto dummyPos = 0; dummyPos < collections.capacity(); ++dummyPos)
 		{
-			const auto [nameLength, signatureValue] = read_byte_pair(collectionStream);
+			const auto [nameLength, flagValue] = read_byte_pair(collectionStream);
 
-			SIGNATURE_CHECK(signatureValue);
+			SIGNATURE_CHECK(flagValue);
 
 			Collection collection { };
 			collection.gameVersion = gameVersion;
@@ -67,8 +67,8 @@ namespace ws::cm
 
 		for (auto dummyPos = 0; dummyPos < hashCount; ++dummyPos)
 		{
-			const auto [nameLength, signatureValue] = read_byte_pair(collectionStream);
-			SIGNATURE_CHECK(signatureValue);
+			const auto [nameLength, flagValue] = read_byte_pair(collectionStream);
+			SIGNATURE_CHECK(flagValue);
 			beatmapHashs.emplace_back(core::read<std::string>(collectionStream, nameLength));
 		}
 
