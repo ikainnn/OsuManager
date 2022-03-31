@@ -7,6 +7,7 @@
       "inheritEnvironments": [ "msvc_x64_x64" ],
       "buildRoot": "${projectDir}\\Build\\${name}",
       "installRoot": "${projectDir}\\Build\\${name}",
+      "enableMicrosoftCodeAnalysis": true,
       "cmakeCommandArgs": "",
       "buildCommandArgs": "",
       "ctestCommandArgs": ""

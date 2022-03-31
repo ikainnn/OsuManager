@@ -15,7 +15,7 @@ namespace ws::cm
 		std::int32_t gameVersion;
 		std::int8_t  nameLength;
 		std::string	 name;
-		std::int8_t  hashCount;
+		std::int32_t hashCount;
 
 		BeatmapHashs hashs;
 	};

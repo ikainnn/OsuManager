@@ -7,8 +7,8 @@
 
 namespace ws::cm
 {
-	#define _SIGNATURE_CHECK(value)												   \
-		if (value != 0x0B)														   \
+	#define SIGNATURE_CHECK(value)												   \
+		if ((value) != 0x0B)													   \
 		{																		   \
 			std::cerr << "Invalid collection signature. Is it corrupted?" << '\n'; \
 			return { };															   \
@@ -18,7 +18,7 @@ namespace ws::cm
 	constexpr auto MAXIMUM_DATE = 0x5F5BEBF;
 
 	auto read_byte_pair(std::ifstream& collectionStream) -> std::pair<std::int8_t, std::int8_t>;
-	auto read_beatmap_hashs(std::ifstream& collectionStream, const std::size_t hashCount) -> std::vector<std::string>;
+	auto read_beatmap_hashs(std::ifstream& collectionStream, std::size_t hashCount) -> std::vector<std::string>;
 
 	std::vector<Collection> read_collection(std::ifstream& collectionStream)
 	{
@@ -39,7 +39,7 @@ namespace ws::cm
 		{
 			const auto [nameLength, signatureValue] = read_byte_pair(collectionStream);
 
-			_SIGNATURE_CHECK(signatureValue);
+			SIGNATURE_CHECK(signatureValue);
 
 			Collection collection { };
 			collection.gameVersion = gameVersion;
@@ -68,7 +68,7 @@ namespace ws::cm
 		for (auto dummyPos = 0; dummyPos < hashCount; ++dummyPos)
 		{
 			const auto [nameLength, signatureValue] = read_byte_pair(collectionStream);
-			_SIGNATURE_CHECK(signatureValue);
+			SIGNATURE_CHECK(signatureValue);
 			beatmapHashs.emplace_back(core::read<std::string>(collectionStream, nameLength));
 		}
 
