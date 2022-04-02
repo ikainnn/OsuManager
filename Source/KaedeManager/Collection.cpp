@@ -5,7 +5,7 @@
 
 #include "Core/Reader.hpp"
 
-namespace ws::cm
+namespace kaede::api
 {
 	#define SIGNATURE_CHECK(value)												   \
 		if ((value) != 0x0B)													   \
@@ -22,8 +22,6 @@ namespace ws::cm
 
 	auto read_collection(std::ifstream& collectionStream) -> Collections
 	{
-		using namespace ws::cm;
-
 		const auto gameVersion = core::read<std::int32_t>(collectionStream);
 		if (!(gameVersion >= RELEASE_DATE && 
 			  gameVersion <= MAXIMUM_DATE))

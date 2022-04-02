@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-namespace ws::cm::core
+namespace kaede::api::core
 {
 	template <class UnknownType>
 	auto read(std::ifstream& stream, const std::streamsize readSize) -> UnknownType

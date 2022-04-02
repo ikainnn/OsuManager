@@ -6,7 +6,7 @@
 #include <vector>
 #include <fstream>
 
-namespace ws::cm
+namespace kaede::api
 {
 	struct Collection
 	{

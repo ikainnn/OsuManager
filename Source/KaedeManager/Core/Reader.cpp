@@ -1,6 +1,6 @@
 #include "Reader.hpp"
 
-namespace ws::cm::core
+namespace kaede::api::core
 {
 	template <>
 	auto read<std::string>(std::ifstream& stream, const std::streamsize readSize) -> std::string

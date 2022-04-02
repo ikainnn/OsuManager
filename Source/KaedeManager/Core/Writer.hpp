@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-namespace ws::cm::core
+namespace kaede::api::core
 {
 	template <class UnknownType>
 	void write(std::ofstream& stream, const std::streamsize writeSize, const UnknownType& value)

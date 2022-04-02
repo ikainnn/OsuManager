@@ -1,6 +1,6 @@
 #include "Writer.hpp"
 
-namespace ws::cm::core
+namespace kaede::api::core
 {
 	
 }
