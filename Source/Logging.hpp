@@ -1,10 +1,8 @@
 #ifndef LOGGING_HPP
 #define LOGGING_HPP
 
-#include "spdlog/spdlog.h"
-
-#define KAEDE_WARN(msg) spdlog::warn(msg)
-#define KAEDE_ERRO(msg) spdlog::error(msg)
-#define KAEDE_INFO(msg) spdlog::info(msg)
+#define KAEDE_WARN(msg) std::cout << "[WARN] " << msg << '\n';
+#define KAEDE_ERRO(msg) std::cout << "[ERRO] " << msg << '\n';
+#define KAEDE_INFO(msg) std::cout << "[INFO] " << msg << '\n';
 
 #endif
