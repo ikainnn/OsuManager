@@ -15,7 +15,7 @@ namespace kaede::api
 			KAEDE_ERRO("Invalid collection signature. Is it corrupted?"); return { }; \
 		}
 
-	#define PROTECTED_BYTE(value) std::pair{ 0x0B, (value) }  
+	#define PROTECTED_BYTE(value) std::pair{ (value), 0x0B }  
 
 	auto read_byte_pair(std::ifstream& collectionStream) -> std::pair<std::int8_t, std::int8_t>;
 	auto read_beatmap_hashs(std::ifstream& collectionStream, std::size_t hashCount) -> std::vector<std::string>;
