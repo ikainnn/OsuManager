@@ -2,7 +2,7 @@
 
 project(KaedeManager)
 
-set(BASE "Source/KaedeApi")
+set(BASE "Source/KaedeManager")
 
 if (NOT WIN32)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
