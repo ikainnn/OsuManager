@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "Core/Reader.hpp"
+#include "Core/Writer.hpp"
 #include "Logging.hpp"
 
 namespace kaede::api
@@ -53,9 +54,15 @@ namespace kaede::api
 		return collections;
 	}
 	
-	auto write_collection(const Collections& collectionList) -> void
+	auto write_collection(const Collections& collections, std::ofstream& collectionStream) -> void
 	{
-		throw std::runtime_error("Not yet implemented! :^)");	 
+		core::write<std::int32_t>(collectionStream, collections.front().gameVersion);
+		core::write<std::int32_t>(collectionStream, static_cast<std::int32_t>(collections.size()));
+
+		/*for (const auto& collection : collections)
+		{
+			
+		}*/
 	}										
 	
 	auto read_byte_pair(std::ifstream& collectionStream) -> std::pair<std::int8_t, std::int8_t>

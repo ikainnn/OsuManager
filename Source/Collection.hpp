@@ -23,7 +23,7 @@ namespace kaede::api
 	using Collections = std::vector<Collection>;
 
 	auto read_collection(std::ifstream& collectionStream) -> Collections;
-	auto write_collection(const Collections& collectionList) -> void;
+	auto write_collection(const Collections& collections, std::ofstream& collectionStream) -> void;
 }
 
 #endif
