@@ -12,8 +12,12 @@ endif()
 
 add_definitions(-DUNICODE -D_UNICODE)
 
+add_subdirectory("External/spdlog")
+
+include_directories("External/spdlog/include")
+
 set(SRC_FILES "${BASE}/Core/Reader.cpp" 
 			  "${BASE}/Collection.cpp" 
 			  "${BASE}/Core/Writer.cpp")
 
-add_library(${PROJECT_NAME} ${SRC_FILES})
+add_library(${PROJECT_NAME} ${SRC_FILES} spdlog)

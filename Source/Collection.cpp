@@ -4,14 +4,14 @@
 #include <iostream>
 
 #include "Core/Reader.hpp"
+#include "Logging.hpp"
 
 namespace kaede::api
 {
-	#define SIGNATURE_CHECK(value)												   \
-		if ((value) != 0x0B)													   \
-		{																		   \
-			std::cerr << "Invalid collection signature. Is it corrupted?" << '\n'; \
-			return { };															   \
+	#define SIGNATURE_CHECK(value)												      \
+		if ((value) != 0x0B)													      \
+		{																			  \
+			KAEDE_ERRO("Invalid collection signature. Is it corrupted?"); return { }; \
 		}
 
 	auto read_byte_pair(std::ifstream& collectionStream) -> std::pair<std::int8_t, std::int8_t>;
@@ -26,7 +26,7 @@ namespace kaede::api
 		if (!(gameVersion >= RELEASE_DATE && 
 			  gameVersion <= MAXIMUM_DATE))
 		{
-			std::cerr << "Invalid collection date time. Is it corrupted?" << '\n'; return { };
+			KAEDE_ERRO("Invalid collection date time. Is it corrupted?"); return { };
 		}
 
 		std::vector<Collection> collections { };
