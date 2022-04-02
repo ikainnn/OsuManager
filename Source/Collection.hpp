@@ -12,7 +12,6 @@ namespace kaede::api
 	{
 		using BeatmapHashs = std::vector<std::string>;
 
-		std::int32_t gameVersion;
 		std::int8_t  nameLength;
 		std::string	 name;
 		std::int32_t hashCount;
@@ -20,10 +19,10 @@ namespace kaede::api
 		BeatmapHashs hashs;
 	};
 
-	using Collections = std::vector<Collection>;
+	using Collections = std::pair<std::int32_t, std::vector<Collection>>;
 
 	auto read_collection(std::ifstream& collectionStream) -> Collections;
-	auto write_collection(const Collections& collections, std::ofstream& collectionStream) -> void;
+	auto write_collection(std::ofstream& collectionStream, const Collections& collections) -> void;
 }
 
 #endif

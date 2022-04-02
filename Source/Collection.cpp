@@ -9,22 +9,19 @@
 
 namespace kaede::api
 {
-	#define SIGNATURE_CHECK(value)												      \
+	#define PROTECTION_CHECK(value)												      \
 		if ((value) != 0x0B)													      \
 		{																			  \
 			KAEDE_ERRO("Invalid collection signature. Is it corrupted?"); return { }; \
 		}
 
-	#define PROTECTED_BYTE(value) std::pair{ (value), 0x0B }  
-
-	auto read_byte_pair(std::ifstream& collectionStream) -> std::pair<std::int8_t, std::int8_t>;
+	auto read_protected_byte(std::ifstream& collectionStream) -> std::pair<std::int8_t, std::int8_t>;
 	auto read_beatmap_hashs(std::ifstream& collectionStream, std::size_t hashCount) -> std::vector<std::string>;
-	auto write_byte_pair(std::ofstream& collectionStream, const std::pair<std::int8_t, std::int8_t> value) -> void;
+	auto write_protected_byte(std::ofstream& collectionStream, std::int8_t value) -> void;
 	auto write_beatmap_hashs(std::ofstream& collectionStream, const kaede::api::Collection::BeatmapHashs& hashs) -> void;
 
-	constexpr auto RELEASE_DATE	   = 0x1324204;
-	constexpr auto MAXIMUM_DATE	   = 0x5F5BEBF;
-	constexpr auto MD5_HASH_LENGTH = 0x20;
+	constexpr auto RELEASE_DATE	= 0x1324204;
+	constexpr auto MAXIMUM_DATE	= 0x5F5BEBF;
 
 	auto read_collection(std::ifstream& collectionStream) -> Collections
 	{
@@ -35,18 +32,15 @@ namespace kaede::api
 			KAEDE_ERRO("Invalid collection date time. Is it corrupted?"); return { };
 		}
 
-		Collections collections { };
-
-		collections.reserve(core::read<std::int32_t>(collectionStream));
+		std::vector<Collection> collections { core::read<std::int32_t>(collectionStream) };
 
 		for (auto dummyPos = 0; dummyPos < collections.capacity(); ++dummyPos)
 		{
-			const auto [nameLength, flagValue] = read_byte_pair(collectionStream);
+			const auto [nameLength, protectionValue] = read_protected_byte(collectionStream);
 
-			SIGNATURE_CHECK(flagValue);
+			PROTECTION_CHECK(protectionValue);
 
 			Collection collection { };
-			collection.gameVersion = gameVersion;
 			collection.nameLength  = nameLength;
 			collection.name		   = core::read<std::string>(collectionStream, collection.nameLength);
 			collection.hashCount   = core::read<std::int32_t>(collectionStream);
@@ -56,17 +50,19 @@ namespace kaede::api
 			collections.emplace_back(collection);
 		}
 
-		return collections;
+		return { gameVersion, collections };
 	}
 	
-	auto write_collection(const Collections& collections, std::ofstream& collectionStream) -> void
+	auto write_collection(std::ofstream& collectionStream, const Collections& collections) -> void
 	{
-		core::write<std::int32_t>(collectionStream, collections.front().gameVersion);
-		core::write<std::int32_t>(collectionStream, static_cast<std::int32_t>(collections.size()));
+		const auto& [_gameVersion, _collections] = collections;
 
-		for (const auto& collection : collections)
+		core::write<std::int32_t>(collectionStream, _gameVersion);
+		core::write<std::int32_t>(collectionStream, static_cast<std::int32_t>(_collections.size()));
+
+		for (const auto& collection : _collections)
 		{
-			write_byte_pair(collectionStream, PROTECTED_BYTE(collection.nameLength));
+			write_protected_byte(collectionStream, collection.nameLength);
 			core::write<std::string>(collectionStream, collection.name);
 
 			core::write<std::int32_t>(collectionStream, collection.hashCount);
@@ -75,15 +71,15 @@ namespace kaede::api
 		}
 	}
 	
-	auto read_byte_pair(std::ifstream& collectionStream) -> std::pair<std::int8_t, std::int8_t>
+	auto read_protected_byte(std::ifstream& collectionStream) -> std::pair<std::int8_t, std::int8_t>
 	{
 		const auto value = core::read<std::int16_t>(collectionStream);
 		return { (value >> 8), ((value << 12) >> 12) % ((value >> 8) << 8) };
 	}
 	
-	auto write_byte_pair(std::ofstream& collectionStream, const std::pair<std::int8_t, std::int8_t> value) -> void
+	auto write_protected_byte(std::ofstream& collectionStream, std::int8_t value) -> void
 	{
-		core::write<std::int16_t>(collectionStream, static_cast<std::int16_t>((value.first << 8) | value.second));
+		core::write<std::int16_t>(collectionStream, static_cast<std::int16_t>((value << 8) | 0x0B));
 	}
 	
 	auto read_beatmap_hashs(std::ifstream& collectionStream, const std::size_t hashCount) -> Collection::BeatmapHashs
@@ -92,8 +88,10 @@ namespace kaede::api
 
 		for (auto dummyPos = 0; dummyPos < hashCount; ++dummyPos)
 		{
-			const auto [nameLength, flagValue] = read_byte_pair(collectionStream);
-			SIGNATURE_CHECK(flagValue);
+			const auto [nameLength, flagValue] = read_protected_byte(collectionStream);
+
+			PROTECTION_CHECK(flagValue);
+
 			beatmapHashs.emplace_back(core::read<std::string>(collectionStream, nameLength));
 		}
 
@@ -104,7 +102,7 @@ namespace kaede::api
 	{
 		for (const auto& hash : hashs)
 		{
-			write_byte_pair(collectionStream, PROTECTED_BYTE(MD5_HASH_LENGTH));
+			write_protected_byte(collectionStream, hash.size());
 			core::write<std::string>(collectionStream, hash);
 		}
 	}
