@@ -102,7 +102,7 @@ namespace kaede::api
 	{
 		for (const auto& hash : hashs)
 		{
-			write_protected_byte(collectionStream, hash.size());
+			write_protected_byte(collectionStream, static_cast<std::int8_t>(hash.size()));
 			core::write<std::string>(collectionStream, hash);
 		}
 	}
