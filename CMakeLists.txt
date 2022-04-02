@@ -20,4 +20,6 @@ set(SRC_FILES "${BASE}/Core/Reader.cpp"
 			  "${BASE}/Collection.cpp" 
 			  "${BASE}/Core/Writer.cpp")
 
-add_library(${PROJECT_NAME} ${SRC_FILES} spdlog)
+add_library(${PROJECT_NAME} ${SRC_FILES})
+
+link_libraries(spdlog)
