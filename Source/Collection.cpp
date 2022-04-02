@@ -20,6 +20,7 @@ namespace kaede::api
 	auto read_byte_pair(std::ifstream& collectionStream) -> std::pair<std::int8_t, std::int8_t>;
 	auto read_beatmap_hashs(std::ifstream& collectionStream, std::size_t hashCount) -> std::vector<std::string>;
 	auto write_byte_pair(std::ofstream& collectionStream, const std::pair<std::int8_t, std::int8_t> value) -> void;
+	auto write_beatmap_hashs(std::ofstream& collectionStream, const kaede::api::Collection::BeatmapHashs& hashs) -> void;
 
 	constexpr auto RELEASE_DATE	   = 0x1324204;
 	constexpr auto MAXIMUM_DATE	   = 0x5F5BEBF;
@@ -99,7 +100,7 @@ namespace kaede::api
 		return beatmapHashs;
 	}
 
-	auto write_beatmap_hashs(std::ofstream& collectionStream, const kaede::api::Collection::BeatmapHashs& hashs) -> void
+	auto write_beatmap_hashs(std::ofstream& collectionStream, const Collection::BeatmapHashs& hashs) -> void
 	{
 		for (const auto& hash : hashs)
 		{
