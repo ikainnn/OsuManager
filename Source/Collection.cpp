@@ -32,7 +32,8 @@ namespace kaede::api
 			KAEDE_ERRO("Invalid collection date time. Is it corrupted?"); return { };
 		}
 
-		std::vector<Collection> collections { core::read<std::int32_t>(collectionStream) };
+		std::vector<Collection> collections { };
+		collections.reserve(core::read<std::int32_t>(collectionStream));
 
 		for (auto dummyPos = 0; dummyPos < collections.capacity(); ++dummyPos)
 		{
