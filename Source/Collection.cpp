@@ -5,7 +5,7 @@
 
 #include "Core/Reader.hpp"
 #include "Core/Writer.hpp"
-#include "Logging.hpp"
+#include "Common/Logging.hpp"
 
 namespace kaede::api
 {
@@ -85,10 +85,10 @@ namespace kaede::api
 	{
 		core::write<std::int16_t>(collectionStream, static_cast<std::int16_t>((value.first << 8) | value.second));
 	}
-
-	auto read_beatmap_hashs(std::ifstream& collectionStream, const std::size_t hashCount) -> std::vector<std::string>
+	
+	auto read_beatmap_hashs(std::ifstream& collectionStream, const std::size_t hashCount) -> Collection::BeatmapHashs
 	{
-		std::vector<std::string> beatmapHashs { };
+		Collection::BeatmapHashs beatmapHashs { };
 
 		for (auto dummyPos = 0; dummyPos < hashCount; ++dummyPos)
 		{
@@ -99,7 +99,7 @@ namespace kaede::api
 
 		return beatmapHashs;
 	}
-
+	
 	auto write_beatmap_hashs(std::ofstream& collectionStream, const Collection::BeatmapHashs& hashs) -> void
 	{
 		for (const auto& hash : hashs)
