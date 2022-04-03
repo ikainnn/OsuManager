@@ -9,102 +9,101 @@
 
 namespace kaede::api
 {
-	#define PROTECTION_CHECK(value)												      \
-		if ((value) != 0x0B)													      \
-		{																			  \
-			KAEDE_ERRO("Invalid collection signature. Is it corrupted?"); return { }; \
-		}
+#define PROTECTION_CHECK(value)                                                       \
+        if ((value) != 0x0B)                                                          \
+        {                                                                             \
+            KAEDE_ERRO("Invalid collection signature. Is it corrupted?"); return { }; \
+        }
 
-	auto read_protected_byte(std::ifstream& collectionStream) -> std::pair<std::int8_t, std::int8_t>;
-	auto read_beatmap_hashs(std::ifstream& collectionStream, std::size_t hashCount) -> std::vector<std::string>;
-	auto write_protected_byte(std::ofstream& collectionStream, std::int8_t value) -> void;
-	auto write_beatmap_hashs(std::ofstream& collectionStream, const kaede::api::Collection::BeatmapHashs& hashs) -> void;
+    auto read_protected_byte(std::ifstream& collectionStream) -> std::pair<std::int8_t, std::int8_t>;
+    auto read_beatmap_hashs(std::ifstream& collectionStream, std::size_t hashCount) -> std::vector<std::string>;
+    auto write_protected_byte(std::ofstream& collectionStream, std::int8_t value) -> void;
+    auto write_beatmap_hashs(std::ofstream& collectionStream, const kaede::api::Collection::BeatmapHashs& hashs) -> void;
 
-	constexpr auto RELEASE_DATE	= 0x1324204;
-	constexpr auto MAXIMUM_DATE	= 0x5F5BEBF;
+    constexpr auto RELEASE_DATE = 0x1324204;
+    constexpr auto MAXIMUM_DATE = 0x5F5BEBF;
 
-	auto read_collection(std::ifstream& collectionStream) -> Collections
-	{
-		const auto gameVersion = core::read<std::int32_t>(collectionStream);
-		if (!(gameVersion >= RELEASE_DATE && 
-			  gameVersion <= MAXIMUM_DATE))
-		{
-			KAEDE_ERRO("Invalid collection date time. Is it corrupted?"); return { };
-		}
+    auto read_collection(std::ifstream& collectionStream) -> Collections
+    {
+        const auto gameVersion = core::read<std::int32_t>(collectionStream);
+        if ( !( gameVersion >= RELEASE_DATE && gameVersion <= MAXIMUM_DATE ) )
+        {
+            KAEDE_ERRO("Invalid collection date time. Is it corrupted?"); return { };
+        }
 
-		std::vector<Collection> collections { };
-		collections.reserve(core::read<std::int32_t>(collectionStream));
+        std::vector<Collection> collections { };
+        collections.reserve(core::read<std::int32_t>(collectionStream));
 
-		for (auto dummyPos = 0; dummyPos < collections.capacity(); ++dummyPos)
-		{
-			const auto [nameLength, protectionValue] = read_protected_byte(collectionStream);
+        for ( auto dummyPos = 0; dummyPos < collections.capacity(); ++dummyPos )
+        {
+            const auto [nameLength, protectionValue] = read_protected_byte(collectionStream);
 
-			PROTECTION_CHECK(protectionValue);
+            PROTECTION_CHECK(protectionValue);
 
-			Collection collection { };
-			collection.nameLength  = nameLength;
-			collection.name		   = core::read<std::string>(collectionStream, collection.nameLength);
-			collection.hashCount   = core::read<std::int32_t>(collectionStream);
+            Collection collection { };
+            collection.nameLength = nameLength;
+            collection.name = core::read<std::string>(collectionStream, collection.nameLength);
+            collection.hashCount = core::read<std::int32_t>(collectionStream);
 
-			collection.hashs = read_beatmap_hashs(collectionStream, collection.hashCount);
+            collection.hashs = read_beatmap_hashs(collectionStream, collection.hashCount);
 
-			collections.emplace_back(collection);
-		}
+            collections.emplace_back(collection);
+        }
 
-		return { gameVersion, collections };
-	}
-	
-	auto write_collection(std::ofstream& collectionStream, const Collections& collections) -> void
-	{
-		const auto& [_gameVersion, _collections] = collections;
+        return { gameVersion, collections };
+    }
 
-		core::write<std::int32_t>(collectionStream, _gameVersion);
-		core::write<std::int32_t>(collectionStream, static_cast<std::int32_t>(_collections.size()));
+    auto write_collection(std::ofstream& collectionStream, const Collections& collections) -> void
+    {
+        const auto& [_gameVersion, _collections] = collections;
 
-		for (const auto& collection : _collections)
-		{
-			write_protected_byte(collectionStream, collection.nameLength);
-			core::write<std::string>(collectionStream, collection.name);
+        core::write<std::int32_t>(collectionStream, _gameVersion);
+        core::write<std::int32_t>(collectionStream, static_cast<std::int32_t>( _collections.size() ));
 
-			core::write<std::int32_t>(collectionStream, collection.hashCount);
+        for ( const auto& collection : _collections )
+        {
+            write_protected_byte(collectionStream, collection.nameLength);
+            core::write<std::string>(collectionStream, collection.name);
 
-			write_beatmap_hashs(collectionStream, collection.hashs);
-		}
-	}
-	
-	auto read_protected_byte(std::ifstream& collectionStream) -> std::pair<std::int8_t, std::int8_t>
-	{
-		const auto value = core::read<std::int16_t>(collectionStream);
-		return { (value >> 8), ((value << 12) >> 12) % ((value >> 8) << 8) };
-	}
-	
-	auto write_protected_byte(std::ofstream& collectionStream, std::int8_t value) -> void
-	{
-		core::write<std::int16_t>(collectionStream, static_cast<std::int16_t>((value << 8) | 0x0B));
-	}
-	
-	auto read_beatmap_hashs(std::ifstream& collectionStream, const std::size_t hashCount) -> Collection::BeatmapHashs
-	{
-		Collection::BeatmapHashs beatmapHashs { };
+            core::write<std::int32_t>(collectionStream, collection.hashCount);
 
-		for (auto dummyPos = 0; dummyPos < hashCount; ++dummyPos)
-		{
-			const auto [nameLength, flagValue] = read_protected_byte(collectionStream);
+            write_beatmap_hashs(collectionStream, collection.hashs);
+        }
+    }
 
-			PROTECTION_CHECK(flagValue);
+    auto read_protected_byte(std::ifstream& collectionStream) -> std::pair<std::int8_t, std::int8_t>
+    {
+        const auto value = core::read<std::int16_t>(collectionStream);
+        return { ( value >> 8 ), ( ( value << 12 ) >> 12 ) % ( ( value >> 8 ) << 8 ) };
+    }
 
-			beatmapHashs.emplace_back(core::read<std::string>(collectionStream, nameLength));
-		}
+    auto write_protected_byte(std::ofstream& collectionStream, std::int8_t value) -> void
+    {
+        core::write<std::int16_t>(collectionStream, static_cast<std::int16_t>( ( value << 8 ) | 0x0B ));
+    }
 
-		return beatmapHashs;
-	}
-	
-	auto write_beatmap_hashs(std::ofstream& collectionStream, const Collection::BeatmapHashs& hashs) -> void
-	{
-		for (const auto& hash : hashs)
-		{
-			write_protected_byte(collectionStream, static_cast<std::int8_t>(hash.size()));
-			core::write<std::string>(collectionStream, hash);
-		}
-	}
+    auto read_beatmap_hashs(std::ifstream& collectionStream, const std::size_t hashCount) -> Collection::BeatmapHashs
+    {
+        Collection::BeatmapHashs beatmapHashs { };
+
+        for ( auto dummyPos = 0; dummyPos < hashCount; ++dummyPos )
+        {
+            const auto [nameLength, flagValue] = read_protected_byte(collectionStream);
+
+            PROTECTION_CHECK(flagValue);
+
+            beatmapHashs.emplace_back(core::read<std::string>(collectionStream, nameLength));
+        }
+
+        return beatmapHashs;
+    }
+
+    auto write_beatmap_hashs(std::ofstream& collectionStream, const Collection::BeatmapHashs& hashs) -> void
+    {
+        for ( const auto& hash : hashs )
+        {
+            write_protected_byte(collectionStream, static_cast<std::int8_t>( hash.size() ));
+            core::write<std::string>(collectionStream, hash);
+        }
+    }
 }

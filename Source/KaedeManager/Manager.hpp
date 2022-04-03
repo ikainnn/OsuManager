@@ -5,4 +5,4 @@
 #include "Core/Writer.hpp"
 #include "Collection.hpp"
 
-#endif									
+#endif
