@@ -16,6 +16,14 @@ set(SRC_FILES "${BASE}/Core/Reader.cpp"
               "${BASE}/Collection.cpp" 
               "${BASE}/Core/Writer.cpp")
 
+if (NOT SPDLOG_INCLUDE_DIR)
+    message(FATAL_ERROR "SPDLOG_INCLUDE_DIR Couldn't be found. Did you define it in your project?")
+endif()
+
+if (NOT SPDLOG_SOURCE_DIR)
+    message(FATAL_ERROR "SPDLOG_SOURCE_DIR Couldn't be found. Did you define it in your project?")
+endif()
+
 include_directories(${SPDLOG_INCLUDE_DIR})
 
 add_library(${PROJECT_NAME} ${SRC_FILES} ${SPDLOG_SOURCE_DIR})
