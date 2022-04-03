@@ -1,11 +1,12 @@
-#include "Collection.hpp"
+#include "../Include/KaedeManager/Collection.hpp"
 
 #include <fstream>
 #include <iostream>
 
-#include "Core/Reader.hpp"
-#include "Core/Writer.hpp"
-#include "Common/Logging.hpp"
+#include "../Include/KaedeManager/Core/Reader.hpp"
+#include "../Include/KaedeManager/Core/Writer.hpp"
+
+#include "../Include/KaedeManager/Common/Logging.hpp"
 
 namespace kaede::api
 {

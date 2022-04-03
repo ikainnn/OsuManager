@@ -1,4 +1,4 @@
-#include "Writer.hpp"
+#include "../../Include/KaedeManager/Core/Writer.hpp"
 
 namespace kaede::api::core
 {

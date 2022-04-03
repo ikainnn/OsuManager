@@ -1,4 +1,4 @@
-#include "Reader.hpp"
+#include "../../Include/KaedeManager/Core/Reader.hpp"
 
 namespace kaede::api::core
 {
