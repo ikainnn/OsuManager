@@ -12,17 +12,16 @@ endif()
 
 add_definitions(-DUNICODE -D_UNICODE)
 
-set(SRC_FILES "${BASE}/Core/Reader.cpp" 
-              "${BASE}/Collection.cpp" 
-              "${BASE}/Core/Writer.cpp")
+set(SRC_FILES "${BASE}/Core/Reader.cpp" "${BASE}/Collection.cpp" "${BASE}/Core/Writer.cpp")
 
-if (NOT SPDLOG_INCLUDE_DIR)
-    message(FATAL_ERROR "SPDLOG_INCLUDE_DIR Couldn't be found. Did you define it in your project?")
-endif()
+macro(check_variable_definition var)
+    if (NOT ${var})
+        message(FATAL_ERROR "${var} Couldn't be found. Did you define it in your project?")
+    endif()
+endmacro()
 
-if (NOT SPDLOG_SOURCE_DIR)
-    message(FATAL_ERROR "SPDLOG_SOURCE_DIR Couldn't be found. Did you define it in your project?")
-endif()
+check_variable_definition("SPDLOG_INCLUDE_DIR")
+check_variable_definition("SPDLOG_SOURCE_DIR")
 
 include_directories(${SPDLOG_INCLUDE_DIR})
 
