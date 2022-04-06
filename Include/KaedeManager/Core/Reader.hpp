@@ -13,7 +13,7 @@ namespace kaede::api::core
     auto read(std::ifstream& stream, const std::streamsize readSize) -> UnknownType
     {
         UnknownType result { };
-        stream.read(reinterpret_cast<char*>( &result ), readSize);
+        stream.read(reinterpret_cast<char*>(&result), readSize);
         return result;
     }
 
@@ -24,7 +24,7 @@ namespace kaede::api::core
     }
 
     template <>
-    auto read<std::string>(std::ifstream& stream, std::streamsize readSize) -> std::string;
+    auto read<std::string>(std::ifstream& stream, std::streamsize readSize)->std::string;
 }
 
 #endif
