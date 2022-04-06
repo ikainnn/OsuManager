@@ -5,6 +5,8 @@ namespace kaede::api::core
     template <>
     auto read<std::string>(std::ifstream& stream, const std::streamsize readSize) -> std::string
     {
+        // FIXME: has room for improvements.
+
         std::string result { };
 
         result.reserve(readSize);
