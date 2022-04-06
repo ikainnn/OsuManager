@@ -24,7 +24,7 @@ namespace kaede::api::core
     }
 
     template <>
-    auto read<std::string>(std::ifstream& stream, std::streamsize readSize)->std::string;
+    auto read<std::string>(std::ifstream& stream, std::streamsize readSize) -> std::string;
 }
 
 #endif
