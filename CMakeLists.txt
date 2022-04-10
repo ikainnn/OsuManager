@@ -9,7 +9,15 @@ add_definitions(-DUNICODE -D_UNICODE)
 
 set(SOURCE_FILES "${BASE}/Core/Reader.cpp" "${BASE}/Collection.cpp" "${BASE}/Core/Writer.cpp")
 
-add_subdirectory("External/spdlog")
+macro(add_subdirectory_safe var)
+    if (NOT TARGET ${var})
+        add_subdirectory("External/${var}")
+    else()
+        message(STATUS "${var} is already added. nothing changed.")
+    endif()
+endmacro()
+
+add_subdirectory_safe("spdlog")
 
 add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
 
