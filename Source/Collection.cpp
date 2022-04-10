@@ -3,10 +3,10 @@
 #include <fstream>
 #include <iostream>
 
-#include "../Include/KaedeManager/Core/Reader.hpp"
-#include "../Include/KaedeManager/Core/Writer.hpp"
+#include "../Include/KaedeManager/File/Reader.hpp"
+#include "../Include/KaedeManager/File/Writer.hpp"
 
-#include "../Include/KaedeManager/Common/Logging.hpp"
+#include "../Include/Logging.hpp"
 
 namespace kaede::api
 {

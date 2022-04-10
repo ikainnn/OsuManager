@@ -13,11 +13,9 @@
 *.lai
 *.la
 *.a
-*.lib
 *.exe
 *.out
 *.app
-*.opendb
 
 CMakeLists.txt.user
 CMakeCache.txt
@@ -33,5 +31,4 @@ _deps
 
 build/
 .vscode/
-.vs/
-cache/
+.cache/
