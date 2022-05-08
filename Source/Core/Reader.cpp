@@ -5,8 +5,7 @@
 
 namespace kaede::api::core
 {
-    template <>
-    auto read<std::string>(std::ifstream& stream, const std::streamsize readSize) -> std::string
+    auto read(std::ifstream& stream, const std::streamsize readSize) -> std::string
     {
         std::string result { }; result.reserve(readSize);
 

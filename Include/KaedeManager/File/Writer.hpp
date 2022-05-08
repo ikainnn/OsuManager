@@ -14,7 +14,7 @@ namespace kaede::api::core
     {
         stream.write(reinterpret_cast<const char*>(&value), writeSize);
     }
-
+    
     template <class UnknownType>
     auto write(std::ofstream& stream, const UnknownType& value) -> void
     {
@@ -22,7 +22,8 @@ namespace kaede::api::core
     }
 
     template <>
-    auto write<std::string>(std::ofstream& stream, const std::string& value) -> void;
+    auto write<>(std::ofstream& stream, const std::string& value) -> void;
+
 }
 
 #endif
