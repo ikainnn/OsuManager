@@ -17,10 +17,8 @@ macro(add_subdirectory_safe var)
     endif()
 endmacro()
 
-add_subdirectory_safe("spdlog")
-
 add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${SPDLOG_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PUBLIC)
 
-target_link_libraries(${PROJECT_NAME} spdlog)
+target_link_libraries(${PROJECT_NAME})

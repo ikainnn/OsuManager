@@ -16,8 +16,8 @@ namespace kaede::api
             KAEDE_ERRO("Invalid collection signature. Is it corrupted?"); return { }; \
         }
 
-    auto read_protected_byte(std::ifstream& collectionStream)->std::pair<std::int8_t, std::int8_t>;
-    auto read_beatmap_hashs(std::ifstream& collectionStream, std::size_t hashCount)->std::vector<std::string>;
+    auto read_protected_byte(std::ifstream& collectionStream) -> std::pair<std::int8_t, std::int8_t>;
+    auto read_beatmap_hashs(std::ifstream& collectionStream, std::size_t hashCount) -> std::vector<std::string>;
     auto write_protected_byte(std::ofstream& collectionStream, std::int8_t value) -> void;
     auto write_beatmap_hashs(std::ofstream& collectionStream, const kaede::api::Collection::BeatmapHashs& hashs) -> void;
 
@@ -43,22 +43,21 @@ namespace kaede::api
 
             Collection collection { };
             collection.nameLength = nameLength;
-            collection.name = core::read<std::string>(collectionStream, collection.nameLength);
-            collection.hashCount = core::read<std::int32_t>(collectionStream);
-
-            collection.hashs = read_beatmap_hashs(collectionStream, collection.hashCount);
+            collection.name       = core::read<std::string>(collectionStream, collection.nameLength);
+            collection.hashCount  = core::read<std::int32_t>(collectionStream);
+            collection.hashs      = read_beatmap_hashs(collectionStream, collection.hashCount);
 
             collections.emplace_back(collection);
         }
 
-        return { gameVersion, collections };
+        return { gameVersion, std::move(collections) };
     }
 
     auto write_collection(std::ofstream& collectionStream, const Collections& collections) -> void
     {
-        const auto& [_gameVersion, _collections] = collections;
+        const auto& [gameVersion, _collections] = collections;
 
-        core::write<std::int32_t>(collectionStream, _gameVersion);
+        core::write<std::int32_t>(collectionStream, gameVersion);
         core::write<std::int32_t>(collectionStream, static_cast<std::int32_t>(_collections.size()));
 
         for (const auto& collection : _collections)
