@@ -9,14 +9,6 @@ add_definitions(-DUNICODE -D_UNICODE)
 
 set(SOURCE_FILES "${BASE}/Core/Reader.cpp" "${BASE}/Collection.cpp" "${BASE}/Core/Writer.cpp")
 
-macro(add_subdirectory_safe var)
-    if (NOT TARGET ${var})
-        add_subdirectory("External/${var}")
-    else()
-        message(STATUS "${var} is already added. nothing changed.")
-    endif()
-endmacro()
-
 add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
 
 target_include_directories(${PROJECT_NAME} PUBLIC)
