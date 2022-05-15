@@ -2,7 +2,8 @@
 #define LOGGING
 
 #include <iostream>
-#include <format>
+
+#include "fmt/format.h"
 
 #pragma clang diagnostic ignored "-Winvalid-token-paste"
 #pragma clang diagnostic push
