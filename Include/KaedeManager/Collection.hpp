@@ -1,28 +1,25 @@
-#ifndef COLLECTION_HPP
-#define COLLECTION_HPP
+#pragma once
 
 #include <cstdint>
+#include <fstream>
 #include <string>
 #include <vector>
-#include <fstream>
 
 namespace kaede::api
 {
     struct Collection
     {
-        using BeatmapHashs = std::vector<std::string>;
+        using BeatmapHashes = std::vector<std::string>;
 
+        std::string  name;
         std::int8_t  nameLength;
-        std::string	 name;
         std::int32_t hashCount;
 
-        BeatmapHashs hashs;
+        BeatmapHashes hashes;
     };
 
     using Collections = std::pair<std::int32_t, std::vector<Collection>>;
 
-    auto read_collection(std::ifstream& collectionStream) -> Collections;
-    auto write_collection(std::ofstream& collectionStream, const Collections& collections) -> void;
+    auto read_collection(std::ifstream& stream) -> Collections;
+    void write_collection(std::ofstream& strema, const Collections& collections);
 }
-
-#endif

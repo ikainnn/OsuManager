@@ -1,5 +1,4 @@
-#ifndef WRITER_HPP
-#define WRITER_HPP
+#pragma once
 
 #include <cstdint>
 #include <fstream>
@@ -9,21 +8,19 @@
 
 namespace kaede::api::core
 {
-    template <class UnknownType>
-    auto write(std::ofstream& stream, const std::streamsize writeSize, const UnknownType& value) -> void
+    template <class T>
+    auto write(std::ofstream& stream, const std::streamsize writeSize, const T& value) -> void
     {
         stream.write(reinterpret_cast<const char*>(&value), writeSize);
     }
     
-    template <class UnknownType>
-    auto write(std::ofstream& stream, const UnknownType& value) -> void
+    template <class T>
+    auto write(std::ofstream& stream, const T& value) -> void
     {
-        write<UnknownType>(stream, sizeof(UnknownType), value);
+        write<T>(stream, sizeof(T), value);
     }
 
     template <>
     auto write<>(std::ofstream& stream, const std::string& value) -> void;
 
 }
-
-#endif

@@ -1,0 +1,9 @@
+# ninja log v5
+1273	1583	1653087622168265913	libKaedeManager.a	50f88bb5ba8a66dc
+0	1273	1653087621860264543	CMakeFiles/KaedeManager.dir/Source/Collection.cpp.o	3ddfb1cd11713da
+1	854	1653087621444262726	CMakeFiles/KaedeManager.dir/Source/File/Reader.cpp.o	6e0d8ffd2aa56b63
+1	727	1653087621316262166	CMakeFiles/KaedeManager.dir/Source/File/Writer.cpp.o	23fa71a8999a35f3
+0	26	1653088276570900970	build.ninja	59edb86f0ea464b7
+1	454	1653088277030918957	CMakeFiles/KaedeManager.dir/Source/File/Writer.cpp.o	23fa71a8999a35f3
+1	684	1653088277262928031	CMakeFiles/KaedeManager.dir/Source/File/Reader.cpp.o	6e0d8ffd2aa56b63
+684	760	1653088277330930691	libKaedeManager.a	50f88bb5ba8a66dc

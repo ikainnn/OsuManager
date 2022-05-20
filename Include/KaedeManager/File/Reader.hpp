@@ -1,5 +1,4 @@
-#ifndef READER_HPP
-#define READER_HPP
+#pragma once
 
 #include <cstdint>
 #include <fstream>
@@ -9,22 +8,20 @@
 
 namespace kaede::api::core
 {
-    template <class UnknownType>
-    auto read(std::ifstream& stream, const std::streamsize readSize) -> UnknownType
+    template <class T>
+    auto read(std::ifstream& stream, const std::streamsize readSize) -> T
     {
-        UnknownType result { };
+        T result { };
         stream.read(reinterpret_cast<char*>(&result), readSize);
         return result;
     }
 
-    template <class UnknownType>
-    auto read(std::ifstream& stream) -> UnknownType
+    template <class T>
+    auto read(std::ifstream& stream) -> T
     {
-        return read<UnknownType>(stream, sizeof(UnknownType));
+        return read<T>(stream, sizeof(T));
     }
 
     template <>
     auto read(std::ifstream& stream, std::streamsize readSize) -> std::string;
 }
-
-#endif
