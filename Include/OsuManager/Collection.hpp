@@ -20,6 +20,6 @@ namespace osu_manager::api
 
     using Collections = std::pair<std::int32_t, std::vector<Collection>>;
 
-    auto read_collection(std::ifstream& _stream) -> Collections;
-    void write_collection(std::ofstream& _stream, const Collections& _collections);
+    auto read_collection_from_stream(std::ifstream& _stream) -> Collections;
+    void write_collection_to_stream(std::ofstream& _stream, const Collections& _collections);
 }
