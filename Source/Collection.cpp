@@ -25,8 +25,8 @@ namespace kaede::api
 
         for (auto& collection : collections)
         {
-            const auto [nameLength, flagValue] = funcReadBytes(core::read<std::int16_t>(stream));
-            KAEDE_ASSERT(flagValue == 0x0B, "Invalid collection signature. Is it corrupted?");
+            const auto [nameLength, sentinel] = funcReadBytes(core::read<std::int16_t>(stream));
+            KAEDE_ASSERT(sentinel == 0x0B, "Invalid collection signature. Is it corrupted?");
 
             collection =
             { 
@@ -69,8 +69,8 @@ namespace kaede::api
 
         for (auto& beatmapHash : beatmapHashes)
         {
-            const auto [nameLength, flagValue] = funcReadBytes(core::read<std::int16_t>(stream));
-            KAEDE_ASSERT(flagValue == 0x0B, "Invalid collection signature. Is it corrupted?");
+            const auto [nameLength, sentinel] = funcReadBytes(core::read<std::int16_t>(stream));
+            KAEDE_ASSERT(sentinel == 0x0B, "Invalid collection signature. Is it corrupted?");
 
             beatmapHash = core::read<std::string>(stream, nameLength);
         }
