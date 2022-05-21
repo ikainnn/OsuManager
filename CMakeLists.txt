@@ -18,5 +18,6 @@ add_subdirectory_safe("fmt")
 set(SOURCE_FILES "Source/Collection.cpp" "Source/File/Reader.cpp" "Source/File/Writer.cpp")
 
 add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
+
 target_include_directories(${PROJECT_NAME} PRIVATE "External/fmt/include")
 target_link_libraries(${PROJECT_NAME} PRIVATE fmt)
