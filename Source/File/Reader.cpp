@@ -1,9 +1,9 @@
-#include "../../Include/KaedeManager/File/Reader.hpp"
+#include "../../Include/OsuManager/File/Reader.hpp"
 
 #include <ranges>
 #include <algorithm>
 
-namespace kaede::api::core
+namespace osu_manager::api::core
 {
     template <>
     auto read<>(std::ifstream& _stream, const std::streamsize _size) -> std::string

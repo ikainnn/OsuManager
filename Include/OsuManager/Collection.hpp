@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-namespace kaede::api
+namespace osu_manager::api
 {
     struct Collection
     {

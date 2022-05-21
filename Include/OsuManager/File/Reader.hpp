@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-namespace kaede::api::core
+namespace osu_manager::api::core
 {
     template <class T>
     auto read(std::ifstream& _stream, const std::streamsize _size) -> T

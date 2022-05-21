@@ -1,6 +1,6 @@
-#include "../../Include/KaedeManager/File/Writer.hpp"
+#include "../../Include/OsuManager/File/Writer.hpp"
 
-namespace kaede::api::core
+namespace osu_manager::api::core
 {
     template<>
     auto write<>(std::ofstream& _stream, const std::string& _value) -> void

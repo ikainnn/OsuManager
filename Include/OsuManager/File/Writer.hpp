@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-namespace kaede::api::core
+namespace osu_manager::api::core
 {
     template <class T>
     auto write(std::ofstream& _stream, const std::streamsize _size, const T& _value) -> void

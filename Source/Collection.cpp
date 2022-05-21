@@ -1,23 +1,23 @@
 
-#include "../Include/KaedeManager/Collection.hpp"
+#include "../Include/OsuManager/Collection.hpp"
 
-#include "../Include/KaedeManager/File/Reader.hpp"
-#include "../Include/KaedeManager/File/Writer.hpp"
+#include "../Include/OsuManager/File/Reader.hpp"
+#include "../Include/OsuManager/File/Writer.hpp"
 #include "../Include/Logging.hpp"
 
-#define KAEDE_ASSERT(condition, msg) if (!(condition)) kaede::logging::error(msg)
+#define OSU_MAN_ASSERT(condition, msg) if (!(condition)) osu_manager::logging::error(msg)
 
-namespace kaede::api
+namespace osu_manager::api
 {
     auto _read_beatmap_hashes(std::ifstream& _stream, std::size_t _count) -> std::vector<std::string>;
-    void _write_beatmap_hashes(std::ofstream& _stream, const kaede::api::Collection::BeatmapHashes& _hashes);
+    void _write_beatmap_hashes(std::ofstream& _stream, const Collection::BeatmapHashes& _hashes);
 
     auto read_collection_from_stream(std::ifstream& _stream) -> Collections
     {
         constexpr auto RELEASE_DATE = 0x1324204, MAXIMUM_DATE = 0x5F5BEBF;
 
         const auto gameVersion = core::read<std::int32_t>(_stream);
-        KAEDE_ASSERT((gameVersion >= RELEASE_DATE && gameVersion <= MAXIMUM_DATE), "Invalid collection date time. Is it corrupted?");
+        OSU_MAN_ASSERT((gameVersion >= RELEASE_DATE && gameVersion <= MAXIMUM_DATE), "Invalid collection date time. Is it corrupted?");
 
         const auto funcReadBytes = [] (auto&& value) -> std::pair<std::int8_t, std::uint8_t>
             { return { (value >> 8), ((value << 12) >> 12) }; };
@@ -26,7 +26,7 @@ namespace kaede::api
         for (auto& collection : collections)
         {
             const auto [nameLength, sentinel] = funcReadBytes(core::read<std::int16_t>(_stream));
-            KAEDE_ASSERT(sentinel == 0x0B, "Invalid collection signature. Is it corrupted?");
+            OSU_MAN_ASSERT(sentinel == 0x0B, "Invalid collection signature. Is it corrupted?");
 
             collection =
             {
@@ -70,7 +70,7 @@ namespace kaede::api
         for (auto& beatmapHash : beatmapHashes)
         {
             const auto [nameLength, sentinel] = funcReadBytes(core::read<std::int16_t>(_stream));
-            KAEDE_ASSERT(sentinel == 0x0B, "Invalid collection signature. Is it corrupted?");
+            OSU_MAN_ASSERT(sentinel == 0x0B, "Invalid collection signature. Is it corrupted?");
 
             beatmapHash = core::read<std::string>(_stream, nameLength);
         }
