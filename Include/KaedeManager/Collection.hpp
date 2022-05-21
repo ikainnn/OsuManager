@@ -20,6 +20,6 @@ namespace kaede::api
 
     using Collections = std::pair<std::int32_t, std::vector<Collection>>;
 
-    auto read_collection(std::ifstream& stream) -> Collections;
-    void write_collection(std::ofstream& stream, const Collections& collections);
+    auto read_collection(std::ifstream& _stream) -> Collections;
+    void write_collection(std::ofstream& _stream, const Collections& _collections);
 }

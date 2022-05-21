@@ -6,12 +6,12 @@
 namespace kaede::api::core
 {
     template <>
-    auto read<>(std::ifstream& stream, const std::streamsize readSize) -> std::string
+    auto read<>(std::ifstream& _stream, const std::streamsize _size) -> std::string
     {
-        std::string result ( readSize, ' ' );
+        std::string result ( _size, ' ' );
 
         for (auto& chr : result)
-            chr = read<char>(stream);
+            chr = read<char>(_stream);
             
         return result;
     }

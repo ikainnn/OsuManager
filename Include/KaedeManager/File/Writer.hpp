@@ -9,18 +9,18 @@
 namespace kaede::api::core
 {
     template <class T>
-    auto write(std::ofstream& stream, const std::streamsize writeSize, const T& value) -> void
+    auto write(std::ofstream& _stream, const std::streamsize _size, const T& _value) -> void
     {
-        stream.write(reinterpret_cast<const char*>(&value), writeSize);
+        _stream.write(reinterpret_cast<const char*>(&_value), _size);
     }
     
     template <class T>
-    auto write(std::ofstream& stream, const T& value) -> void
+    auto write(std::ofstream& _stream, const T& _value) -> void
     {
-        write<T>(stream, sizeof(T), value);
+        write<T>(_stream, sizeof(T), _value);
     }
 
     template <>
-    auto write<>(std::ofstream& stream, const std::string& value) -> void;
+    auto write<>(std::ofstream& _stream, const std::string& _value) -> void;
 
 }

@@ -3,9 +3,9 @@
 namespace kaede::api::core
 {
     template<>
-    auto write<>(std::ofstream& stream, const std::string& value) -> void
+    auto write<>(std::ofstream& _stream, const std::string& _value) -> void
     {
-        for (auto byte : value) 
-            write<char>(stream, byte);
+        for (auto byte : _value) 
+            write<char>(_stream, byte);
     }
 }

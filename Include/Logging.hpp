@@ -12,7 +12,7 @@
 
 namespace kaede::logging
 {
-    void print(std::string_view tag, std::string_view format, auto&&... args)
+    void print(std::string_view _tag, std::string_view _format, auto&&... _args)
     {
     #if KAEDE_DEBUG_BUILD
         const auto clock       = std::chrono::system_clock::now();
@@ -23,18 +23,18 @@ namespace kaede::logging
     #endif
     }
 
-    void error(std::string_view format, auto&&... args)
+    void error(std::string_view _format, auto&&... _args)
     {
-        print("ERROR", format, args...);
+        print("ERROR", _format, _args...);
     }
 
-    void warn(std::string_view format, auto&&... args)
+    void warn(std::string_view _format, auto&&... _args)
     {
-        print("WARN", format, args...);
+        print("WARN", _format, _args...);
     }
 
-    void info(std::string_view format, auto&&... args)
+    void info(std::string_view _format, auto&&... _args)
     {
-        print("INFO", format, args...);
+        print("INFO", _format, _args...);
     }
 }
