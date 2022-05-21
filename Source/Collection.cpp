@@ -5,7 +5,7 @@
 #include "../Include/OsuManager/File/Writer.hpp"
 #include "../Include/Logging.hpp"
 
-#define OSU_MAN_ASSERT(condition, msg) if (!(condition)) osu_manager::logging::error(msg)
+#define OSU_MAN_ASSERT(condition, msg) if (!(condition)) { osu_manager::logging::error(msg); } return {};
 
 namespace osu_manager::api
 {
