@@ -5,37 +5,28 @@
 #include "../Include/KaedeManager/File/Writer.hpp"
 #include "../Include/Logging.hpp"
 
+#define KAEDE_ASSERT(condition, msg) if (!(condition)) kaede::logging::error(msg)
+
 namespace kaede::api
 {
-    #define PROTECTION_CHECK(value)                                                              \
-        if ((value) != 0x0B)                                                                     \
-        {                                                                                        \
-            kaede::logging::error("Invalid collection signature. Is it corrupted?"); return { }; \
-        }
-
-    auto read_protected_byte(std::ifstream& stream) -> std::pair<std::int8_t, std::int8_t>;
     auto read_beatmap_hashes(std::ifstream& stream, std::size_t count) -> std::vector<std::string>;
-    void write_protected_byte(std::ofstream& stream, std::int8_t value);
-    void write_beatmap_hashes(std::ofstream& stream, const kaede::api::Collection::BeatmapHashes& hashs);
+    void write_beatmap_hashes(std::ofstream& stream, const kaede::api::Collection::BeatmapHashes& hashes);
 
-    auto read_collection(std::ifstream& stream) -> Collections
+    auto read_collection_from_stream(std::ifstream& stream) -> Collections
     {
-        constexpr auto RELEASE_DATE = 0x1324204;
-        constexpr auto MAXIMUM_DATE = 0x5F5BEBF;
+        constexpr auto RELEASE_DATE = 0x1324204, MAXIMUM_DATE = 0x5F5BEBF;
         
         const auto gameVersion = core::read<std::int32_t>(stream);
-        if (!(gameVersion >= RELEASE_DATE && gameVersion <= MAXIMUM_DATE))
-        {
-            kaede::logging::error("Invalid collection date time. Is it corrupted?"); return { };
-        }
+        KAEDE_ASSERT((gameVersion >= RELEASE_DATE && gameVersion <= MAXIMUM_DATE), "Invalid collection date time. Is it corrupted?");
 
+        const auto funcReadBytes = [&stream] (auto&& value) -> std::pair<std::int8_t, std::int8_t>
+            { return { (value >> 8), ((value << 12) >> 12) % ((value >> 8) << 8) }; };
         std::vector<Collection> collections ( core::read<std::int32_t>(stream) );
 
         for (auto& collection : collections)
         {
-            const auto [nameLength, protectionValue] = read_protected_byte(stream);
-
-            PROTECTION_CHECK(protectionValue);
+            const auto [nameLength, flagValue] = funcReadBytes(core::read<std::int16_t>(stream));
+            KAEDE_ASSERT(flagValue == 0x0B, "Invalid collection signature. Is it corrupted?");
 
             collection =
             { 
@@ -49,16 +40,19 @@ namespace kaede::api
         return { gameVersion, collections };
     }
 
-    void write_collection(std::ofstream& stream, const Collections& collections)
+    void write_collection_to_stream(std::ofstream& stream, const Collections& collections)
     {
         const auto& [gameVersion, _collections] = collections;
 
         core::write<std::int32_t>(stream, gameVersion);
         core::write<std::int32_t>(stream, static_cast<std::int32_t>(_collections.size()));
 
+        const auto funcWriteByte = [&stream](auto&& value)
+            { core::write<std::int16_t>(stream, static_cast<std::int16_t>((value << 8) | 0x0B)); };
+
         for (const auto& collection : _collections)
         {
-            write_protected_byte(stream, collection.nameLength);
+            funcWriteByte(collection.nameLength);
             core::write<std::string>(stream, collection.name);
             core::write<std::int32_t>(stream, collection.hashCount);
 
@@ -66,39 +60,33 @@ namespace kaede::api
         }
     }
 
-    auto read_protected_byte(std::ifstream& stream) -> std::pair<std::int8_t, std::int8_t>
-    {
-        const auto value = core::read<std::int16_t>(stream);
-        return { (value >> 8), ((value << 12) >> 12) % ((value >> 8) << 8) };
-    }
-
     auto read_beatmap_hashes(std::ifstream& stream, const std::size_t count) -> Collection::BeatmapHashes
     {
         Collection::BeatmapHashes beatmapHashes ( count );
 
+        const auto funcReadBytes = [&stream] (auto&& value) -> std::pair<std::int8_t, std::int8_t>
+            { return { (value >> 8), ((value << 12) >> 12) % ((value >> 8) << 8) }; };
+
         for (auto& beatmapHash : beatmapHashes)
         {
-            const auto [nameLength, flagValue] = read_protected_byte(stream);
-            PROTECTION_CHECK(flagValue);
+            const auto [nameLength, flagValue] = funcReadBytes(core::read<std::int16_t>(stream));
+            KAEDE_ASSERT(flagValue == 0x0B, "Invalid collection signature. Is it corrupted?");
+
             beatmapHash = core::read<std::string>(stream, nameLength);
         }
 
         return beatmapHashes;
     }
 
-    void write_beatmap_hashes(std::ofstream& stream, const Collection::BeatmapHashes& hashs)
+    void write_beatmap_hashes(std::ofstream& stream, const Collection::BeatmapHashes& hashes)
     {
-        for (const auto& hash : hashs)
+        const auto funcWriteByte = [&stream](auto&& value)
+            { core::write<std::int16_t>(stream, static_cast<std::int16_t>((value << 8) | 0x0B)); };
+
+        for (const auto& hash : hashes)
         {
-            write_protected_byte(stream, static_cast<std::int8_t>(hash.size()));
+            funcWriteByte(static_cast<std::int8_t>(hash.size()));
             core::write<std::string>(stream, hash);
         }
-    }
-
-    void write_protected_byte(std::ofstream& stream, const std::int8_t value)
-    {
-        // FIXME: why do i need to cast this thing? cant exactly remember 
-        // but maybe there's no need for this.
-        core::write<std::int16_t>(stream, static_cast<std::int16_t>((value << 8) | 0x0B));
     }
 }
