@@ -15,12 +15,12 @@ namespace osu_manager::api
     auto read_collection_from_stream(std::ifstream& _stream) -> Collections
     {
         constexpr auto RELEASE_DATE = 0x1324204, MAXIMUM_DATE = 0x5F5BEBF;
-
         const auto gameVersion = core::read<std::int32_t>(_stream);
         OSU_MAN_ASSERT((gameVersion >= RELEASE_DATE && gameVersion <= MAXIMUM_DATE), "Invalid collection date time. Is it corrupted?");
 
         const auto funcReadBytes = [] (auto&& value) -> std::pair<std::int8_t, std::uint8_t>
             { return { (value >> 8), ((value << 12) >> 12) }; };
+
         std::vector<Collection> collections ( core::read<std::int32_t>(_stream) );
 
         for (auto& collection : collections)
@@ -28,12 +28,10 @@ namespace osu_manager::api
             const auto [nameLength, sentinel] = funcReadBytes(core::read<std::int16_t>(_stream));
             OSU_MAN_ASSERT(sentinel == 0x0B, "Invalid collection signature. Is it corrupted?");
 
-            {
-                collection.name       = core::read<std::string>(_stream, nameLength);
-                collection.nameLength = nameLength;
-                collection.hashCount  = core::read<std::int32_t>(_stream);
-                collection.hashes     = _read_beatmap_hashes(_stream, collection.hashCount);
-            };
+            collection.name       = core::read<std::string>(_stream, nameLength);
+            collection.nameLength = nameLength;
+            collection.hashCount  = core::read<std::int32_t>(_stream);
+            collection.hashes     = _read_beatmap_hashes(_stream, collection.hashCount);
         }
 
         return { gameVersion, collections };

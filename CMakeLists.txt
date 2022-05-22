@@ -4,6 +4,9 @@ project(OsuManager)
 set(CMAKE_CXX_STANDARD 20)
 
 add_definitions(-DUNICODE -D_UNICODE)
+if (CMAKE_BUILD_TYPE STREQUAL "DEBUG")
+    add_definitions(-DDEBUG_BUILD)
+endif()
 
 macro(add_subdirectory_safe var)
     if (NOT TARGET ${var})
