@@ -28,12 +28,11 @@ namespace osu_manager::api
             const auto [nameLength, sentinel] = funcReadBytes(core::read<std::int16_t>(_stream));
             OSU_MAN_ASSERT(sentinel == 0x0B, "Invalid collection signature. Is it corrupted?");
 
-            collection =
             {
-                .name       = core::read<std::string>(_stream, nameLength),
-                .nameLength = nameLength,
-                .hashCount  = core::read<std::int32_t>(_stream),
-                .hashes     = _read_beatmap_hashes(_stream, collection.hashCount)
+                collection.name       = core::read<std::string>(_stream, nameLength);
+                collection.nameLength = nameLength;
+                collection.hashCount  = core::read<std::int32_t>(_stream);
+                collection.hashes     = _read_beatmap_hashes(_stream, collection.hashCount);
             };
         }
 
